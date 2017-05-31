@@ -22,5 +22,11 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.text).to eq(game_question.question.text)
       expect(game_question.level).to eq(game_question.question.level)
     end
+
+    #так как мы проставили "1" к варианту b при создании game_question,
+    #то вариант b должен быть правильным
+    it 'correct .correct_answer_key' do
+      expect(game_question.correct_answer_key).to eq('b')
+    end
   end
 end
