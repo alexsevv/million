@@ -67,8 +67,19 @@ RSpec.describe GamesController, type: :controller do
 
       expect(game.finished?).to be_falsey
       expect(game.current_level).to be > 0
-      expect(response).to redirect_to(game_path(game))
+      expect(response).to redirect_to(game_path(user))
       expect(flash.empty?).to be_truthy #удачный ответ не заполняет flash
+    end
+
+    it 'answer incorrect' do
+      put :answer, id:game_w_questions.id, letter: 'z'
+
+      game = assigns(:game)
+
+      expect(flash[:alert]).to be #ошибка есть
+      expect(game.finished?).to be_truthy #игра закончилась
+      expect(game.current_level).to be == 0 #левел не поднялся
+      expect(response).to redirect_to user_path(user) #редиректнуло на страницу юзера
     end
 
     it '#show alien game' do
