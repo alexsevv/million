@@ -67,7 +67,7 @@ RSpec.describe GamesController, type: :controller do
 
       expect(game.finished?).to be_falsey
       expect(game.current_level).to be > 0
-      expect(response).to redirect_to(game_path(user))
+      expect(response).to redirect_to(game_path(game))
       expect(flash.empty?).to be_truthy #удачный ответ не заполняет flash
     end
 
