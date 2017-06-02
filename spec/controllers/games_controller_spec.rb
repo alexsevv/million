@@ -18,6 +18,16 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
     end
+
+    #анонимный юзер не может создавать игру
+    it 'kick from #create' do
+      generate_questions(60)
+      post :create
+      game = assigns(:game)
+
+      expect(game).to be_nil
+      expect(flash[:alert]).to be
+    end
   end
 
   #группа тестов на экшены контроллера, доступных залогиненным юзерам
@@ -106,6 +116,8 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(game_path(game_w_questions))
       expect(flash[:alert]).to be
     end
+
+
 
   end
 end
