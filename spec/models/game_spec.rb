@@ -136,11 +136,9 @@ RSpec.describe Game, type: :model do
     it 'answer last' do
       #ставим текущий уровень максимальным
       game_w_questions.current_level = Question::QUESTION_LEVELS.max
-      level = game_w_questions.current_level
-      #вводим правильный ответ
-      game_w_questions.answer_current_question!('d')
 
-      expect(game_w_questions.current_level).to eq(level + 1)
+      #проверяем правильный ответ
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
       #статус игры должен быть won
       expect(game_w_questions.status).to eq(:won)
       #денег должно быть на счету больше или равно 1_000_000
