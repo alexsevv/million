@@ -116,7 +116,7 @@ class Game < ActiveRecord::Base
       # Если ответили правильно, увеличиваем текущий уровень вопроса.
       self.current_level += 1
 
-      if current_level == Question::QUESTION_LEVELS.max
+      if current_level == Question::QUESTION_LEVELS.max + 1
         # Если это был последний вопрос, заканчиваем игру методом finish_game!
         finish_game!(PRIZES[Question::QUESTION_LEVELS.max], false)
       else
