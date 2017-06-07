@@ -38,7 +38,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-
+  # Тесты на основную игровую логику
   context 'game mechanics' do
     it 'answer correct continues' do
       level = game_w_questions.current_level
@@ -71,6 +71,14 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.finished?).to be_truthy
       expect(user.balance).to eq prize
     end
+
+    it '#current_game_question' do
+      expect(game_w_questions.current_game_question.id).to eq(game_w_questions.current_level + 1)
+    end
+
+    it '#previous_level' do
+      expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
+    end
   end
 
   # группа тестов на проверку статуса игры
@@ -101,16 +109,6 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:money)
     end
   end
-
-
-  it '#current_game_question' do
-    expect(game_w_questions.current_game_question.id).to eq(game_w_questions.current_level + 1)
-  end
-
-  it '#previous_level' do
-    expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
-  end
-
 
   # группа тестов на проверку .answer_current_question!
   context '.answer_current_question!' do
