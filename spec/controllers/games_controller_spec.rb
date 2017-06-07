@@ -19,6 +19,7 @@ RSpec.describe GamesController, type: :controller do
       expect(flash[:alert]).to be
     end
 
+    #анонимный юзер не может создавать игру
     it 'kick from #create' do
       post :create
       game = assigns(:game)
@@ -79,7 +80,6 @@ RSpec.describe GamesController, type: :controller do
 
     it 'answer correct' do
       put :answer, id:game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
-
       game = assigns(:game)
 
       expect(game.finished?).to be_falsey
@@ -90,13 +90,13 @@ RSpec.describe GamesController, type: :controller do
 
     it 'answer incorrect' do
       put :answer, id:game_w_questions.id, letter: 'z'
-
       game = assigns(:game)
 
       expect(flash[:alert]).to be #ошибка есть
       expect(game.finished?).to be_truthy #игра закончилась
       expect(game.current_level).to be == 0 #левел не поднялся
       expect(response).to redirect_to user_path(user) #редиректнуло на страницу юзера
+      expect(game.status).to eq(:fail)#проверили статус игры
     end
 
     it '#show alien game' do
