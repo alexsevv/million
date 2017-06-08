@@ -40,7 +40,7 @@ RSpec.describe Game, type: :model do
 
   # Тесты на основную игровую логику
   context 'game mechanics' do
-    it 'answer correct continues' do
+    it 'after true answer' do
       level = game_w_questions.current_level
       q = game_w_questions.current_game_question
       expect(game_w_questions.status).to eq(:in_progress)
@@ -54,8 +54,10 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:in_progress)
       expect(game_w_questions.finished?).to be_falsey
     end
+  end
 
-    it 'take_money! finishes the game' do
+  context '#take_money!' do
+    it 'finishes the game' do
       # берем игру и отвечаем на текущий вопрос
       q = game_w_questions.current_game_question
       game_w_questions.answer_current_question!(q.correct_answer_key)
@@ -74,7 +76,7 @@ RSpec.describe Game, type: :model do
   end
 
   # группа тестов на проверку статуса игры
-  context '.status' do
+  context '#status' do
     # перед каждым тестом "завершаем игру"
     before(:each) do
       game_w_questions.finished_at = Time.now
@@ -103,8 +105,8 @@ RSpec.describe Game, type: :model do
   end
 
   # группа тестов на проверку .answer_current_question!
-  context '.answer_current_question!' do
-    it 'answer true' do
+  context '#answer_current_question!' do
+    it 'true answer for the current question' do
       level = game_w_questions.current_level
 
       expect(game_w_questions.answer_current_question!('d')).to be_truthy
@@ -112,7 +114,7 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:in_progress)
     end
 
-    it 'answer false' do
+    it 'false answer for current question' do
       # берем игру и отвечаем на текущий вопрос
       level = game_w_questions.current_level
 
@@ -124,7 +126,7 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:fail)
     end
 
-    it 'answer last' do
+    it 'true answer for last question' do
       #ставим текущий уровень максимальным
       game_w_questions.current_level = Question::QUESTION_LEVELS.max
 
@@ -136,7 +138,7 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.prize).to be >= 1_000_000
     end
 
-    it 'answer in timeout' do
+    it 'answer if time is over' do
       game_w_questions.finished_at = Time.now
       game_w_questions.created_at = 1.hour.ago
       expect(game_w_questions.answer_current_question!('d')).to be_falsey
@@ -154,7 +156,8 @@ RSpec.describe Game, type: :model do
   # тестируем метод cprevious_level
   context '#previous_level' do
     it 'returns the previous level of the game' do
-      expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
+      game_w_questions.current_level = 10
+      expect(game_w_questions.previous_level).to eq 9
     end
   end
 end
