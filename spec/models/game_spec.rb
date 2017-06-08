@@ -71,14 +71,6 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.finished?).to be_truthy
       expect(user.balance).to eq prize
     end
-
-    it '#current_game_question' do
-      expect(game_w_questions.current_game_question.id).to eq(game_w_questions.current_level + 1)
-    end
-
-    it '#previous_level' do
-      expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
-    end
   end
 
   # группа тестов на проверку статуса игры
@@ -112,7 +104,6 @@ RSpec.describe Game, type: :model do
 
   # группа тестов на проверку .answer_current_question!
   context '.answer_current_question!' do
-
     it 'answer true' do
       level = game_w_questions.current_level
 
@@ -151,6 +142,23 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.answer_current_question!('d')).to be_falsey
       expect(game_w_questions.status).to eq(:timeout)
     end
+  end
 
+  # тестируем метод current_game_question
+  context '#current_game_question' do
+    it 'returns current unanswered question' do
+      expect(game_w_questions.current_game_question.id).to eq(game_w_questions.current_level + 1)
+    end
+  end
+
+  # тестируем метод cprevious_level
+  context '#previous_level' do
+    it 'returns the previous level of the game' do
+      level = game_w_questions.current_level
+
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
+      expect(game_w_questions.current_level).to eq(level + 1)
+      expect(game_w_questions.status).to eq(:in_progress)
+    end
   end
 end
