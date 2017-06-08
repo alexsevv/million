@@ -154,11 +154,7 @@ RSpec.describe Game, type: :model do
   # тестируем метод cprevious_level
   context '#previous_level' do
     it 'returns the previous level of the game' do
-      level = game_w_questions.current_level
-
-      expect(game_w_questions.answer_current_question!('d')).to be_truthy
-      expect(game_w_questions.current_level).to eq(level + 1)
-      expect(game_w_questions.status).to eq(:in_progress)
+      expect(game_w_questions.previous_level).to eq(game_w_questions.current_level - 1)
     end
   end
 end
