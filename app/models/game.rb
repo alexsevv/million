@@ -143,7 +143,7 @@ class Game < ActiveRecord::Base
     finish_game!(previous_level > -1 ? PRIZES[previous_level] : 0, false)
   end
 
- # TODO: Дорогой ученик!
+  # TODO: Дорогой ученик!
   #
   # Код метода ниже можно сократиь в 3 раза с помощью возможностей Ruby и Rails,
   # подумайте как и реализуйте. Помните о безопасности и входных данных!
@@ -157,17 +157,30 @@ class Game < ActiveRecord::Base
   #
   # help_type = :fifty_fifty | :audience_help | :friend_call
   def use_help(help_type)
-   help_types = %i(fifty_fifty audience_help friend_call)
-   help_type = help_type.to_sym
-   raise ArgumentError.new('wrong help_type') unless help_types.include?(help_type)
+    case help_type
+    when :fifty_fifty
+      unless fifty_fifty_used
+        # ActiveRecord метод toggle! переключает булевое поле сразу в базе
+        toggle!(:fifty_fifty_used)
+        current_game_question.add_fifty_fifty
+        return true
+      end
+    when :audience_help
+      unless audience_help_used
+        toggle!(:audience_help_used)
+        current_game_question.add_audience_help
+        return true
+      end
+    when :friend_call
+      unless friend_call_used
+        toggle!(:friend_call_used)
+        current_game_question.add_friend_call
+        return true
+      end
+    end
 
-   unless self["#{help_type}_used"]
-     self["#{help_type}_used"] = true
-     current_game_question.apply_help!(help_type)
-     save
-   end
-   # false не нужен — unless вернёт nil, если не будет исполнен
- end
+    false
+  end
 
   def status
     return :in_progress unless finished?
