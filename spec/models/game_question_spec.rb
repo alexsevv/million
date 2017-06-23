@@ -66,6 +66,7 @@ RSpec.describe GameQuestion, type: :model do
     it 'correct .add friend_call' do
       # сначала убедимся, в подсказках пока нет нужного ключа
       expect(game_question.help_hash).not_to include(:friend_call)
+      allow(GameHelpGenerator).to receive(:friend_call).and_return('зуб даю это А')
       # вызовем подсказку
       game_question.add_friend_call
 
@@ -75,6 +76,7 @@ RSpec.describe GameQuestion, type: :model do
 
       #мы задали текстовые подсказки, проверим что они строки
       expect(ff).to be_kind_of(String)
+      expect(ff).to include('зуб даю это А')
     end
   end
 
