@@ -11,14 +11,14 @@ RSpec.feature 'USER gives wrong answer', type: :feature do
     login_as game_w_questions.user
   end
 
-  scenario 'successfully' do
+  scenario 'first answer is wrong' do
     #1 неправильный ответ
     visit game_path(Game.last)
     click_link 'A'
     expect(page).to have_content 'Игра закончена, ваш приз 0 ₽'
   end
 
-  scenario 'successfully' do
+  scenario 'after 7 right answers' do
     #1 неправильный ответ после 7 правильных
     visit game_path(Game.last)
     7.times { click_link 'D' }
@@ -26,7 +26,7 @@ RSpec.feature 'USER gives wrong answer', type: :feature do
     expect(page).to have_content 'Игра закончена, ваш приз 1 000 ₽'
   end
 
-  scenario 'successfully' do
+  scenario 'after 12 right answers' do
     #1 неправильный ответ после 12 правильных
     visit game_path(Game.last)
     12.times { click_link 'D' }
