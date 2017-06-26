@@ -10,9 +10,9 @@ RSpec.describe 'users/show', type: :view do
       assign(:user, user)
 
       assign(:games, [
-        FactoryGirl.build_stubbed(:game_with_questions),
-        FactoryGirl.build_stubbed(:game_with_questions),
-        FactoryGirl.build_stubbed(:game_with_questions)
+        FactoryGirl.build_stubbed(:game_with_questions, created_at: '12 июня, 12:45'),
+        FactoryGirl.build_stubbed(:game_with_questions, created_at: '12 июня, 13:55'),
+        FactoryGirl.build_stubbed(:game_with_questions, created_at: '19 июня, 14:59')
       ])
 
       allow(view).to receive(:current_user).and_return(user)
@@ -33,8 +33,10 @@ RSpec.describe 'users/show', type: :view do
     # Текущий пользователь видит фрагмент игры
     it 'renders fragment game' do
       expect(rendered).to match '50/50'
-      #проверим, что игра создалась только что
-      expect(rendered).to match l Time.now, format: :short
+      #проверим, что игры создалась в указанное время
+      expect(rendered).to match '12 июня, 12:45'
+      expect(rendered).to match '12 июня, 13:55'
+      expect(rendered).to match '19 июня, 14:59'
     end
   end
 
