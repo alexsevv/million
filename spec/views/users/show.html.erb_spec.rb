@@ -33,6 +33,8 @@ RSpec.describe 'users/show', type: :view do
     # Текущий пользователь видит фрагмент игры
     it 'renders fragment game' do
       expect(rendered).to match '50/50'
+      #проверим, что игра создалась только что
+      expect(rendered).to match l Time.now, format: :short
     end
   end
 
